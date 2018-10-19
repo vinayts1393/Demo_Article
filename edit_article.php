@@ -1,3 +1,12 @@
+<?php
+
+session_start();
+include('php/db_config.php');
+$aid=$_GET['id'];
+//print($aid);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +19,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/flatly/bootstrap.min.css">
     
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    
+    <style>
+
+  .modal-content{ height:auto;}
+
+.modal-body {
+   position: sticky;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+   flex: 1 1 auto;
+    padding: 1rem;
+    margin-top: 10px;
+}      
+ .imgstyle{
+            height:120px;
+            width:120px;
+            
+    }        
+
+ </style> 
 </head>    
     <body>
     <form>
@@ -34,7 +61,7 @@
                         
                         <div class="form-group">
                           <label for="usr"> Images</label>
-                          <input type="file" class="form-control" name="files" id="img_file" multiple required>
+                          <input type="file" class="form-control" name="files" id="img_file" multiple >
                         </div>
                         
              <div class="form-group">
@@ -59,15 +86,38 @@
                         </div>
         
          <div class="modal-footer">
-            <input type="submit" class="btn btn-success btn-lg" id="add_article" name="submit" value="submit"/>
+            <input type="submit" class="btn btn-success btn-lg" id="update_article" name="submit" value="update"/>
                      <a class="btn btn-success btn-lg" href="dashboard.php">close</a>
             
           </div>
-        
+          <input type="hidden" id="a_aid" name="artID" value="">
         </form>
+        <div id="imag">
         
+        </div>
         <p id="err_msg" style="color:red;size:12px;"></p><p id="cr_msg" style="color:green;size:12px;"></p>
-</div>
+</div >
+
+
+<?php
+ $stmt1=$dbcon->prepare("select * from a_images where aid=? ");
+        $stmt1->execute(array($aid));
+        $imgarr=array();
+        $i=0;
+        foreach($stmt1 as $row)
+        {
+                 $data1=$row['image'];
+                 echo '<img class="rounded imgstyle" src ="data:image/jpeg;base64,'.base64_encode($data1).'"  > ';
+                 echo '<a class="btn btn-success btn-lg" href="php/delete_image.php?id='.$row['imgid'].'&aid='.$row['aid'].' ">delete</a>';
+                
+                
+                
+        }
+
+
+?>
+
+
 </div>
 </div>        
 
@@ -77,17 +127,66 @@
 <script>
 
 $(document).ready(function(){
+    
+    
+   
+   
+   var data_id=window.location.search;
+   
+  
 
-$('#add_article').on('click', function(event) {
+                   
+   
+   
+   $.ajax({
+       url:'php/get_article.php'.concat(data_id),
+       cache: false,
+       contentType: false,
+       
+       processData: false, 
+       type:'GET',
+       success: function(usr_result){
+               var usr=JSON.parse(usr_result);
+               //console.log(usr[0]['id'].length);
+               if(usr.flag==1){
+                       $('#article_title').val(usr.atit);
+                       $('#art_desp').val(usr.desp);
+                       $('#article_tags').val(usr.tags);
+                       $('#article_caterogy').val(usr.cate);
+                       
+                       
+               } 
+               
+              
+               
+       }       
+           
+           
+   });
+
+
+
+
+
+$('#update_article').on('click', function(event) {
+       
         
         event.preventDefault();
-  
+         var daid='<?php echo $aid; ?>';
+         var newid=parseInt(daid);
+         console.log(newid);
+         console.log(typeof newid);
+         
         var count=0;
         var data = new FormData();
-        jQuery.each(jQuery('#img_file')[0].files, function(i, file) {
-            data.append('file'+i, file);
-            count=count+1;
-        });
+        if(document.getElementById('img_file').files.length!=0){
+                jQuery.each(jQuery('#img_file')[0].files, function(i, file) {
+                data.append('file'+i, file);
+                count=count+1;
+                });
+        
+        }
+     data.append('aid',newid);        
     data.append('atitle',$('#article_title').val());
     data.append('adesp',$('#art_desp').val());
     data.append('acat',$('#article_caterogy').val());
@@ -95,7 +194,7 @@ $('#add_article').on('click', function(event) {
     data.append('cc',count);
     //alert(data);                             
     $.ajax({
-        url:'php/add_article.php', // point to server-side PHP script 
+        url:'php/update_article.php', // point to server-side PHP script 
         //dataType: 'text',  // what to expect back from the PHP script, if anything
         cache: false,
         contentType: false,
@@ -114,7 +213,7 @@ $('#add_article').on('click', function(event) {
 		 else if(usr_result==1)
 		 {
 		     	 //$("#err_msg").html('registered successfully! now login thank you')
-                         alert("Succesfully artcile uploaded");
+                         alert("updated Succesfully artcile");
                          window.location.href="dashboard.php";
 		         
 		 }

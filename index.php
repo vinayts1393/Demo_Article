@@ -362,7 +362,7 @@ $("#submit-login").click(function (event) {
 		 {
 		     	 //$("#err_msg").html('registered successfully! now login thank you')
                          alert("Succesfull login");
-                         window.location.href="dashboard.html";
+                         window.location.href="dashboard.php";
 		         
 		 }
 		 else

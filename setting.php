@@ -114,7 +114,7 @@ $prefrences=$_SESSION['preferences'];
 		</div>
 	
 
-         <a class="btn btn-success btn-lg" href="dashboard.html">close</a>
+         <a class="btn btn-success btn-lg" href="dashboard.php">close</a>
 </div>
 <p id="err_msg" style="color:red;size:12px;"></p><p id="cr_msg" style="color:green;size:12px;"></p>
 </div>
@@ -194,7 +194,7 @@ $prefrences=$_SESSION['preferences'];
           console.log($('#first_name').val());
           console.log($('#dob').val());
           
-          var regname = /^[a-zA-Z]+$/;
+          var regname = /^[a-zA-Z ]+$/;
         var fname=document.getElementById('first_name');
         console.log("start validate");
   
