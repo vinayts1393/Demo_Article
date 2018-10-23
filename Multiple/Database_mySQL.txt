@@ -1,0 +1,46 @@
+//Register table
+
+CREATE table register(
+id int AUTO_INCREMENT PRIMARY KEY,
+firstname varchar(100),
+    lastname varchar(100),
+    email varchar(100),
+    phone varchar(50) NOT NULL,
+    dob varchar(50) NOT NULL,
+    preferences varchar(100) NOT NULL,
+    password varchar(100) NOT NULL
+);
+
+
+CREATE TABLE articles(
+    aid int AUTO_INCREMENT PRIMARY KEY,
+    a_title varchar(100) NOT NULL,
+    a_description LONGTEXT NOT NULL,
+    a_category int NOT NULL,
+    a_tags varchar(50) NOT NULL,
+    email varchar(100) NOT NULL
+    
+);
+
+
+
+CREATE table feedback(
+    id int AUTO_INCREMENT PRIMARY key,
+    aid int(11),
+    email varchar(100),
+    liked int,
+    dislike int,
+    block int 
+);
+
+
+
+
+
+CREATE table a_images(
+    imgid int(11) AUTO_INCREMENT PRIMARY KEY,
+    aid int(11),
+    imgname varchar(100) NOT NULL ,
+    image longblob NOT NULL
+
+);
