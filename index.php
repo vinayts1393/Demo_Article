@@ -84,7 +84,7 @@ session_start();
 <body>
 <div class="container">
 
-    
+	<h1> Articles Demo </h1>
     <div class="row">
         <div class="col-md-6">
         <h1 class="text-center">Register</h1>
