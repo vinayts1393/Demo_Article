@@ -28,8 +28,7 @@ CREATE table feedback(
     id int AUTO_INCREMENT PRIMARY key,
     aid int(11),
     email varchar(100),
-    liked int,
-    dislike int,
+    like_dislike int,
     block int 
 );
 
